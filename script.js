@@ -1,14 +1,16 @@
 const fileName = 'sample.bms';
-const text = [];
+let text = null;
 
-(async fileName => {
-    const response = await fetch(fileName);
-    const result = await response.text();
-    text.push(result);
-    console.log(result);
-})(fileName);
+fetch(fileName)
+.then(response => response.text())
+.then(result => text = result);
 
-console.log("//////////////////////////////////////");
+// (async fileName => {
+//     const response = await fetch(fileName);
+//     const result = await response.text();
+//     console.log(result);
+// })(fileName);
+
 console.log(text);
 
 const data = [];

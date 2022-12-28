@@ -1,7 +1,8 @@
 const fileName = 'sample.bms';
 const text = (async fileName => {
     const response = await fetch(fileName);
-    return await response.text();
+    const result = await response.text();
+    return result;
 })(fileName);
 
 console.log(text);

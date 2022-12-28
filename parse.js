@@ -1,15 +1,18 @@
 const fileName = `sample.bms`;
+const answer = [];
 
 fetch(fileName)
 .then(response => response.text())
-.then(result => {
-    console.log(result);
-
+.then(rawData => {
+    for (let i = 0; i < 10; i++) {
+        answer.push(i);
+    }
     // HEADER FIELD
 
 
     // MAIN DATA FIELD
 
 
-})
-.catch(console.log(`fetch error`));
+});
+
+console.log(answer);

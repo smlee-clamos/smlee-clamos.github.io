@@ -1,7 +1,14 @@
-console.log(text);
+const fileName = `sample.bms`;
 
-// HEADER FIELD
+fetch(fileName)
+.then(response => response.text())
+.then(result => {
+    console.log(result);
+
+    // HEADER FIELD
 
 
-// MAIN DATA FIELD
+    // MAIN DATA FIELD
 
+
+});

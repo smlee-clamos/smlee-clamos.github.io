@@ -9,7 +9,7 @@ const text = [];
 })(fileName);
 
 console.log("//////////////////////////////////////");
-console.log(text[0]);
+console.log(text);
 
 const data = [];
 

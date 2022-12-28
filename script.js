@@ -13,5 +13,7 @@ const data = [];
 
 async function readFile(fileName) {
     const response = await fetch(fileName);
-    return await response.text();
+    const result = await response.text();
+    console.log(result);
+    return result;
 }

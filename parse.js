@@ -1,4 +1,4 @@
-const fileName = `wrongfile.bms`;
+const fileName = `sample.bms`;
 
 fetch(fileName)
 .then(response => response.text())
@@ -12,4 +12,4 @@ fetch(fileName)
 
 
 })
-.catch(err => console.log(err));
+.catch(console.log(`fetch error`));

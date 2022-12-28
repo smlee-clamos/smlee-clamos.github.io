@@ -1,6 +1,14 @@
 const fileName = 'sample.bms';
-const text = readFile(fileName);
+let text;
 
+(async fileName => {
+    const response = await fetch(fileName);
+    const result = await response.text();
+    console.log(result);
+    text = result;
+})(fileName);
+
+console.log("//////////////////////////////////////");
 console.log(text);
 
 const data = [];
@@ -10,10 +18,3 @@ const data = [];
 
 // MAIN DATA FIELD
 
-
-async function readFile(fileName) {
-    const response = await fetch(fileName);
-    const result = await response.text();
-    console.log(result);
-    return result;
-}

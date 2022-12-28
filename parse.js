@@ -1,9 +1,14 @@
 const fileName = `sample.bms`;
 
-makeChart(fileName);
+readFile(fileName);
 
-async function makeChart(fileName) {
+async function readFile(fileName) {
     const res = await fetch(fileName);
     const data = await res.text();
+    
+    makeChart(data);
+}
+
+function makeChart(data) {
     console.log(data);
 }

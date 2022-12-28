@@ -1,6 +1,6 @@
-let response = await fetch('sample.txt');
-let text = await response.text();
-console.log(text);
+fetch('sample.txt')
+.then(response => response.text())
+.then(text => console.log(text));
 
 // Promise.all([
 //     fetch('sample.txt').then(x => x.text()),

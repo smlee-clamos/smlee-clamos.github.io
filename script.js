@@ -6,7 +6,6 @@ const text = async fileName => {
     return text;
 }
 
-readFile(fileName);
 const data = [];
 
 // HEADER FIELD

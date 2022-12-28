@@ -4,8 +4,8 @@ let text;
 (async fileName => {
     const response = await fetch(fileName);
     const result = await response.text();
-    console.log(result);
     text = result;
+    console.log(result);
 })(fileName);
 
 console.log("//////////////////////////////////////");

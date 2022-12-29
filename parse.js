@@ -1,10 +1,11 @@
+const chart = [];
+
 makeChart(`sample.bms`);
 
 async function makeChart(fileName) {
     const res = await fetch(fileName);
     const rawData = await res.text();
     const data = rawData.split(`\n`).map(element => element.trim()).filter(element => element !== ``);
-    const chart = [];
     const info = new Object();
     
     let isHeader = true;

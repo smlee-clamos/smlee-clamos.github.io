@@ -1,11 +1,16 @@
 const fileName = `sample.bms`;
-let chart = null;
+const chart = null;
 
 readFile(fileName);
 
 async function readFile(fileName) {
     const res = await fetch(fileName);
-    const data = await res.text();
+    const rawData = await res.text();
+    const data = rawData.split(`\n`).map(element => element.trim()).filter(element => element !== ``);
+    console.log(data);
+
+    // *---------------------- HEADER FIELD
+
     
-    chart = data.split(`\n`);
+    // *---------------------- MAIN DATA FIELD
 }

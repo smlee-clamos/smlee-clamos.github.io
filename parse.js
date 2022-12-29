@@ -16,10 +16,10 @@ async function makeChart(fileName) {
         }
         else {
             if (isHeader) {
-                const key = datum.slice(0, datum.indexOf(` `));
+                const key = datum.slice(1, datum.indexOf(` `));
                 const value = datum.slice(datum.indexOf(` `) + 1);
                 
-                const infoCheck = [`#TITLE`, `#ARTIST`, `#BPM`, `#PLAYLEVEL`];
+                const infoCheck = [`TITLE`, `ARTIST`, `BPM`, `PLAYLEVEL`];
                 if (infoCheck.includes(key))
                     info[key] = value;
             } else {

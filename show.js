@@ -1,3 +1,4 @@
-function testFunc(arr) {
-    console.log(arr);
-}
+window.addEventListener(`load`, () => {
+    makeChart(`sample.bms`);
+    console.log(chart);
+});

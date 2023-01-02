@@ -1,6 +1,6 @@
 const chart = [];
 
-makeChart(`sample.bms`);
+// makeChart(`sample.bms`);
 
 async function makeChart(fileName) {
     const res = await fetch(fileName);
@@ -33,12 +33,9 @@ async function makeChart(fileName) {
             while (chart.length - 1 < measure) {
                 const obj = {};
                 chart.push(obj);
-                console.log(`pushed`);
             }
             
             chart[measure][lane] = value;
-
-            console.log(`${measure}, ${lane}: ${value}`);
         }
     }
 }

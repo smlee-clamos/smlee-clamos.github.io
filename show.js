@@ -1,4 +1,5 @@
 window.addEventListener(`load`, () => {
-    makeChart(`sample.bms`);
+    parseChart(`sample.bms`);
+    chartDefault();
     console.log(chart);
 });

@@ -1,8 +1,6 @@
 const chart = [];
 
-// makeChart(`sample.bms`);
-
-async function makeChart(fileName) {
+async function parseChart(fileName) {
     const res = await fetch(fileName);
     const rawData = await res.text();
     const data = rawData.split(`\n`).map(element => element.trim()).filter(element => element !== ``);
@@ -21,7 +19,7 @@ async function makeChart(fileName) {
             const key = datum.slice(1, datum.indexOf(` `));
             const value = datum.slice(datum.indexOf(` `) + 1);
             
-            if ([`TITLE`, `ARTIST`, `BPM`, `PLAYLEVEL`].includes(key)) {
+            if ([`TITLE`, `GENRE`, `ARTIST`, `BPM`, `PLAYLEVEL`].includes(key)) {
                 chart[0][key] = value;
             }
         } else {

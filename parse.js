@@ -19,7 +19,7 @@ async function parseChart(fileName) {
             const key = datum.slice(1, datum.indexOf(` `));
             const value = datum.slice(datum.indexOf(` `) + 1);
             
-            if ([`TITLE`, `GENRE`, `ARTIST`, `BPM`, `PLAYLEVEL`].includes(key)) {
+            if ([`TITLE`, `GENRE`, `ARTIST`, `BPM`, `PLAYLEVEL`, `RANK`].includes(key)) {
                 chart[0][key] = value;
             }
         } else {

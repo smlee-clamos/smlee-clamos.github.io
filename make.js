@@ -1,6 +1,7 @@
 // 4/4 박자에서 한 마디를 몇 픽셀로 표기할 것인가
 const displaySize = 256;
 const keys = Number(chart[0][`GENRE`]);
+const measureStart = Number(chart[0][`RANK`]);
 
 // 노트별 참조 리소스
 let noteGreen = '8g.png';

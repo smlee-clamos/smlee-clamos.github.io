@@ -13,6 +13,9 @@ async function makeChart(fileName) {
             // Start Header Field
             const obj = {};
             chart.push(obj);
+        } else if (datum === `*---------------------- MAIN DATA FIELD`) {
+            // Start Main Data Field
+            isHeader = false;
         } else if (isHeader) {
             // Parse Header Field
             const key = datum.slice(1, datum.indexOf(` `));
@@ -21,9 +24,6 @@ async function makeChart(fileName) {
             if ([`TITLE`, `ARTIST`, `BPM`, `PLAYLEVEL`].includes(key)) {
                 chart[0][key] = value;
             }
-        } else if (datum === `*---------------------- MAIN DATA FIELD`) {
-            // Start Main Data Field
-            isHeader = false;
         } else {
             // Parse Main Data Field
             const [key, value] = datum.split(`:`);

@@ -30,7 +30,7 @@ async function makeChart(fileName) {
             const measure = Number(key.slice(1, 4));
             const lane = key.slice(4);
 
-            if (!chart[measure]) {
+            while (chart.length - 1 < measure) {
                 const obj = {};
                 chart.push(obj);
             }

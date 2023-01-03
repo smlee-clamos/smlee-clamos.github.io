@@ -1,5 +1,7 @@
 const chart = [];
 
+parseChart(`sample.bms`);
+
 async function parseChart(fileName) {
     const res = await fetch(fileName);
     const rawData = await res.text();

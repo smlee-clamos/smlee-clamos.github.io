@@ -1,7 +1,5 @@
 // 4/4 박자에서 한 마디를 몇 픽셀로 표기할 것인가
 const displaySize = 256;
-const keys = Number(chart[0][`GENRE`]);
-const measureStart = Number(chart[0][`RANK`]);
 
 // 노트별 참조 리소스
 let noteGreen = '8g.png';
@@ -10,6 +8,7 @@ let noteWhite = '';
 let laneWidth = 0;
 let chipSize = 5;
 let currentOrder = '';
+let keys = 0;
 
 // 노트 별 리소스 할당
 function getNoteResources() {
@@ -117,6 +116,7 @@ function makeChart() {
     // 마디별 노트 작성
     for (let measureNo = 1; measureNo < chart.length; measureNo++) {
         // 곡마다 시작 마디를 설정하면 그 번호가 맨 아래로 가게끔 할 수 있다.
+        const measureStart = Number(chart[0][`RANK`]);
         let measureReal = measureNo - measureStart;
         if (measureReal >= 0 && measureReal % 4 == 0) {
             globalTd = document.createElement('td');
@@ -142,6 +142,7 @@ function makeChart() {
         localTd.appendChild(div);
         
         // 레인별 노트 위치
+        keys = Number(chart[0][`GENRE`]);
         let chipArray = [];
         let longArray = [];
         switch (keys) {

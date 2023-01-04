@@ -141,14 +141,13 @@ function makeChart() {
     // 전역 틀 만들기
     const globalTable = document.createElement(`table`);
     const globalTr = document.createElement(`tr`);
-    const globalTd = document.createElement(`td`);
+    let globalTd = document.createElement(`td`);
 
     globalTable.id = `data`;
     globalTable.appendChild(globalTr);
 
     document.getElementById(`article`).appendChild(globalTable);
 
-    globalTd = document.createElement(`td`);
     globalTr.appendChild(globalTd);
 
     // 모드별 버튼 리소스 획득
@@ -189,8 +188,8 @@ function makeChart() {
         localTd.appendChild(div);
         
         // 레인별 노트 위치
-        const chipArray = [];
-        const longArray = [];
+        let chipArray = null;
+        let longArray = null;
         switch (keys) {
             case 4:
                 chipArray = [chart[measure][11], chart[measure][12], chart[measure][14], chart[measure][15]];
@@ -339,9 +338,9 @@ function makeChartForArray(isChipArray, inputArray, div, width, longAlive = null
 }
 
 // 노트 위치 설정 후 삽입
-function insertNote(div, lane, noteStyle) {
+function insertNote(div, source, noteStyle) {
     const note = document.createElement(`img`);
-    note.src = getNoteColor(lane);
+    note.src = source;
     note.setAttribute(`style`, noteStyle);
     div.appendChild(note);
 }

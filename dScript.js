@@ -132,14 +132,13 @@ function makeChart() {
     // 전역 틀 만들기
     const globalTable = document.createElement(`table`);
     const globalTr = document.createElement(`tr`);
-    const globalTd = document.createElement(`td`);
+    let globalTd = document.createElement(`td`);
 
     globalTable.id = `data`;
     globalTable.appendChild(globalTr);
 
     document.getElementById(`article`).appendChild(globalTable);
 
-    globalTd = document.createElement(`td`);
     globalTr.appendChild(globalTd);
 
     // 모드별 버튼 리소스 획득
@@ -185,8 +184,8 @@ function makeChart() {
         const sideArray = [chart[measure][04], chart[measure][07]];
         const chipFXArray = [chart[measure][16], chart[measure][14]];
         const longFXArray = [chart[measure][56], chart[measure][54]];
-        const chipArray = [];
-        const longArray = [];
+        let chipArray = null;
+        let longArray = null;
         switch (keys) {
             case 4:
                 chipArray = [chart[measure][11], chart[measure][12], chart[measure][14], chart[measure][15]];

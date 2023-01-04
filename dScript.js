@@ -85,7 +85,7 @@ function getButtonResources() {
 }
 
 // 해당 레인이 백건반인지 흑건반인지 파악
-function getNoteColor(lane) {
+function getNoteImage(lane) {
     switch (keys) {
         case 4:
             if (lane === 1 || lane === 2) {
@@ -240,129 +240,22 @@ function makeChart() {
         // 화면에 채보 출력
 
         // 사이드 트랙
-        makeChartForArray(false, sideArray, div, noteSide, sideWidth, sideAlive, sidePos);
+        makeChartFromArray(false, sideArray, div, noteSide, sideWidth, sideAlive, sidePos);
 
         // FX
         if (isFXMode) {
-            makeChartForArray(true, chipFXArray, div, noteFX, sideWidth);
-            makeChartForArray(false, longFXArray, div, noteFX, sideWidth, FXAlive, FXPos);
+            makeChartFromArray(true, chipFXArray, div, noteFX, sideWidth);
+            makeChartFromArray(false, longFXArray, div, noteFX, sideWidth, FXAlive, FXPos);
         }
 
         // 노트
-        makeChartForArray(true, chipArray, div, getNoteColor(lane), laneWidth);
-        makeChartForArray(false, longArray, div, getNoteColor(lane), laneWidth, longAlive, longPos);
-
-        // // 이 마디가 몇 비트로 구성되었는지
-        // let bits = 0;
-        // const noteLiteral = `01`;
-        
-
-        // // 사이드 트랙 + FX
-        // for (let lane = 0; lane < 2; lane++) {
-        //     // 사이드 트랙
-        //     bits = sideArray[lane] ? sideArray[lane].length / 2 : 0;
-        //     for (let pos = 0; pos < bits; pos++) {
-        //         if (sideArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //             // 사이드 트랙 시작점을 체크
-        //             if (!sideAlive[lane]) {
-        //                 sidePos[lane] = pos;
-        //             } else {
-        //                 insertNote(div, noteSide, `bottom: ${sidePos[lane] * displaySize / bits - 1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${(pos - sidePos[lane]) * displaySize / bits}px;`);
-        //             }
-                    
-        //             // 사이드 트랙 사활 토글
-        //             sideAlive[lane] = !sideAlive[lane];
-        //         }
-
-        //         // 다음 마디까지 사이드 트랙이 이어질 때
-        //         if ((pos === bits - 1) && sideAlive[lane]) {
-        //             insertNote(div, noteSide, `bottom: ${sidePos[lane] * displaySize / bits - 1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${(bits - sidePos[lane]) * displaySize / bits + 1}px;`);
-        //         }
-        //     }
-
-        //     // 전 마디부터 이번 마디도 꽉 채울 때
-        //     if (sideAlive[lane] && !sideArray[lane]) {
-        //         insertNote(div, noteSide, `bottom: ${-1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${displaySize + 1}px;`);
-        //     }
-
-        //     // FX
-        //     if (isFXMode) {
-        //         // 칩 FX
-        //         bits = chipFXArray[lane] ? chipFXArray[lane].length / 2 : 0;
-        //         for (let pos = 0; pos < bits; pos++) {
-        //             if (chipFXArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //                 insertNote(div, noteFX, `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${chipSize}px;`);
-        //             }
-        //         }
-        
-        //         // 롱 FX
-        //         bits = longFXArray[lane] ? longFXArray[lane].length / 2 : 0;
-        //         for (let pos = 0; pos < bits; pos++) {
-        //             if (longFXArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //                 // 롱 FX 시작점을 체크
-        //                 if (!FXAlive[lane]) {
-        //                     FXPos[lane] = pos;
-        //                 } else {
-        //                     insertNote(div, noteFX, `bottom: ${FXPos[lane] * displaySize / bits - 1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${(pos - FXPos[lane]) * displaySize / bits}px;`);
-        //                 }
-                        
-        //                 // 롱 FX 사활 토글
-        //                 FXAlive[lane] = !FXAlive[lane];
-        //             }
-
-        //             // 다음 마디까지 롱노트가 이어질 때
-        //             if (FXAlive[lane] && (pos === bits - 1)) {
-        //                 insertNote(div, noteFX, `bottom: ${FXPos[lane] * displaySize / bits - 1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${(bits - FXPos[lane]) * displaySize / bits + 1}px;`);
-        //             }
-        //         }
-
-        //         // 전 마디부터 이번 마디도 꽉 채울 때
-        //         if (FXAlive[lane] && !longFXArray[lane]) {
-        //             insertNote(div, noteFX, `bottom: ${-1}px; left: ${lane * sideWidth}px; width: ${sideWidth}px; height: ${displaySize + 1}px;`);
-        //         }
-        //     }
-        // }
-
-        // for (let lane = 0; lane < keys; lane++) {
-        //     // 칩 노트
-        //     bits = chipArray[lane] ? chipArray[lane].length / 2 : 0;
-        //     for (let pos = 0; pos < bits; pos++) {
-        //         if (chipArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //             insertNote(div, getBlackWhite(lane), `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${chipSize}px;`);
-        //         }
-        //     }
-
-        //     // 롱 노트
-        //     bits = longArray[lane] ? longArray[lane].length / 2 : 0;
-        //     for (let pos = 0; pos < bits; pos++) {
-        //         if (longArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //             // 롱노트 시작점을 체크
-        //             if (!longAlive[lane]) {
-        //                 longPos[lane] = pos;
-        //             } else {
-        //                 insertNote(div, getBlackWhite(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
-        //             }
-
-        //             // 롱노트 사활 토글
-        //             longAlive[lane] = !longAlive[lane];
-        //         }
-
-        //         // 다음 마디까지 롱노트가 이어질 때
-        //         if (longAlive[lane] && (pos === bits - 1)) {
-        //             insertNote(div, getBlackWhite(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
-        //         }
-        //     }
-
-        //     // 전 마디부터 이번 마디도 꽉 채울 때
-        //     if (longAlive[lane] && !longArray[lane]) {
-        //         insertNote(div, getBlackWhite(lane), `bottom: ${-1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${displaySize + 1}px;`);
-        //     }
-        // }
+        makeChartFromArray(true, chipArray, div, getNoteImage(lane), laneWidth);
+        makeChartFromArray(false, longArray, div, getNoteImage(lane), laneWidth, longAlive, longPos);
     }
 }
 
 // 주어진 배열에 맞게 채보 작성
-function makeChartForArray(isChipArray, inputArray, div, noteSource, width, longAlive = null, longPos = null) {
+function makeChartFromArray(isChipArray, inputArray, div, noteSource, width, longAlive = null, longPos = null) {
     const noteLiteral = `01`;
 
     for (let lane = 0; lane < (isFXMode ? 2 : keys); lane++) {
@@ -450,7 +343,7 @@ function getOrderFromText(order) {
             break;
     }
 
-    return order.toString().padStart(keys, `0`);
+    return String(order).padStart(keys, `0`);
 }
 
 // 커스텀 배치 생성

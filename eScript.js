@@ -84,7 +84,7 @@ function getNoteResources() {
 }
 
 // 해당 레인이 백건반인지 흑건반인지 파악
-function getNoteColor(lane) {
+function getNoteImage(lane) {
     switch (keys) {
         case 4:
             if (lane === 1 || lane === 2) {
@@ -245,57 +245,13 @@ function makeChart() {
         }
 
         // 화면에 채보 출력
-
-        // 노트
-        makeChartForArray(true, chipArray, div, laneWidth);
-        makeChartForArray(false, longArray, div, laneWidth, longAlive, longPos);
-        
-        // // 이 마디가 몇 비트로 구성되었는지
-        // let bits = 0;
-        // const noteLiteral = `01`;
-        
-        // for (let lane = 0; lane < keys; lane++) {
-        //     // 칩 노트
-        //     bits = chipArray[lane] ? chipArray[lane].length / 2 : 0;
-        //     for (let pos = 0; pos < bits; pos++) {
-        //         // 01 보이면 해당 위치에 노트 작성
-        //         if (chipArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //             insertNote(div, lane, `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${chipSize}px;`);
-        //         }
-        //     }
-
-        //     // 롱 노트
-        //     bits = longArray[lane] ? longArray[lane].length / 2 : 0;
-        //     for (let pos = 0; pos < bits; pos++) {
-        //         // 01 보이면 해당 위치에 노트 작성
-        //         if (longArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-        //             // 롱노트 시작점을 체크
-        //             if (!longAlive[lane]) {
-        //                 longPos[lane] = pos;
-        //             } else {
-        //                 insertNote(div, lane, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
-        //             }
-
-        //             // 롱노트 사활 토글
-        //             longAlive[lane] = !longAlive[lane];
-        //         }
-
-        //         // 다음 마디까지 롱노트가 이어질 때
-        //         if (longAlive[lane] && (pos === bits - 1)) {
-        //             insertNote(div, lane, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
-        //         }
-        //     }
-
-        //     // 전 마디부터 이번 마디도 꽉 채울 때
-        //     if (longAlive[lane] && !longArray[lane]) {
-        //         insertNote(div, lane, `bottom: ${-1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${displaySize + 1}px;`);
-        //     }
-        // }
+        makeChartFromArray(true, chipArray, div, laneWidth);
+        makeChartFromArray(false, longArray, div, laneWidth, longAlive, longPos);
     }
 }
 
 // 주어진 배열에 맞게 채보 작성
-function makeChartForArray(isChipArray, inputArray, div, width, longAlive = null, longPos = null) {
+function makeChartFromArray(isChipArray, inputArray, div, width, longAlive = null, longPos = null) {
     const noteLiteral = `01`;
 
     for (let lane = 0; lane < keys; lane++) {
@@ -304,7 +260,7 @@ function makeChartForArray(isChipArray, inputArray, div, width, longAlive = null
             const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
             for (let pos = 0; pos < bits; pos++) {
                 if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-                    insertNote(div, getNoteColor(lane), `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * width}px; width: ${width}px; height: ${chipSize}px;`);
+                    insertNote(div, getNoteImage(lane), `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * width}px; width: ${width}px; height: ${chipSize}px;`);
                 }
             }
         } else {
@@ -316,7 +272,7 @@ function makeChartForArray(isChipArray, inputArray, div, width, longAlive = null
                     if (!longAlive[lane]) {
                         longPos[lane] = pos;
                     } else {
-                        insertNote(div, getNoteColor(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * width}px; width: ${width}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
+                        insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * width}px; width: ${width}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
                     }
     
                     // 롱노트 사활 토글
@@ -325,13 +281,13 @@ function makeChartForArray(isChipArray, inputArray, div, width, longAlive = null
     
                 // 다음 마디까지 롱노트가 이어질 때
                 if (longAlive[lane] && pos === (bits - 1)) {
-                    insertNote(div, getNoteColor(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * width}px; width: ${width}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
+                    insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * width}px; width: ${width}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
                 }
             }
     
             // 전 마디부터 이번 마디도 꽉 채울 때
             if (longAlive[lane] && !inputArray[lane]) {
-                insertNote(div, getNoteColor(lane), `bottom: ${-1}px; left: ${lane * width}px; width: ${width}px; height: ${displaySize + 1}px;`);
+                insertNote(div, getNoteImage(lane), `bottom: ${-1}px; left: ${lane * width}px; width: ${width}px; height: ${displaySize + 1}px;`);
             }
         }
     }
@@ -388,7 +344,7 @@ function getOrderFromText(order) {
             break;
     }
 
-    return order.toString().padStart(keys, `0`);
+    return String(order).padStart(keys, `0`);
 }
 
 // 커스텀 배치 생성

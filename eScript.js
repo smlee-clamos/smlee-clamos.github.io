@@ -1,6 +1,8 @@
 const chart = [];
 let keys = 0;
 
+parseChart(`sample.txt`);
+
 async function parseChart(fileName) {
     const res = await fetch(fileName);
     const rawData = await res.text();

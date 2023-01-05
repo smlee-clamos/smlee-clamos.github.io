@@ -41,7 +41,7 @@ async function parseChart(fileName) {
 
     // FX 모드 구분
     keys = chart[0][`GENRE`];
-    if (`+2`.includes(keys)) {
+    if (keys.includes(`+2`)) {
         keys = Number(keys[0]);
         isFXMode = true;
     }
@@ -181,23 +181,23 @@ function makeChart() {
         localTd.appendChild(div);
         
         // 레인별 노트 위치
-        const sideArray = [chart[measure][04], chart[measure][07]];
-        const chipFXArray = [chart[measure][16], chart[measure][14]];
-        const longFXArray = [chart[measure][56], chart[measure][54]];
+        const sideArray = [chart[measure][`04`], chart[measure][`07`]];
+        const chipFXArray = [chart[measure][`16`], chart[measure][`14`]];
+        const longFXArray = [chart[measure][`56`], chart[measure][`54`]];
         let chipArray = null;
         let longArray = null;
         switch (keys) {
             case 4:
-                chipArray = [chart[measure][11], chart[measure][12], chart[measure][14], chart[measure][15]];
-                longArray = [chart[measure][51], chart[measure][52], chart[measure][54], chart[measure][55]];
+                chipArray = [chart[measure][`11`], chart[measure][`12`], chart[measure][`14`], chart[measure][`15`]];
+                longArray = [chart[measure][`51`], chart[measure][`52`], chart[measure][`54`], chart[measure][`55`]];
                 break;
             case 5:
-                chipArray = [chart[measure][11], chart[measure][12], chart[measure][13], chart[measure][14], chart[measure][15]];
-                longArray = [chart[measure][51], chart[measure][52], chart[measure][53], chart[measure][54], chart[measure][55]];
+                chipArray = [chart[measure][`11`], chart[measure][`12`], chart[measure][`13`], chart[measure][`14`], chart[measure][`15`]];
+                longArray = [chart[measure][`51`], chart[measure][`52`], chart[measure][`53`], chart[measure][`54`], chart[measure][`55`]];
                 break;
             case 6:
-                chipArray = [chart[measure][11], chart[measure][12], chart[measure][13], chart[measure][15], chart[measure][18], chart[measure][19]];
-                longArray = [chart[measure][51], chart[measure][52], chart[measure][53], chart[measure][55], chart[measure][58], chart[measure][59]];
+                chipArray = [chart[measure][`11`], chart[measure][`12`], chart[measure][`13`], chart[measure][`15`], chart[measure][`18`], chart[measure][`19`]];
+                longArray = [chart[measure][`51`], chart[measure][`52`], chart[measure][`53`], chart[measure][`55`], chart[measure][`58`], chart[measure][`59`]];
                 break;
         }
 
@@ -240,25 +240,25 @@ function makeChart() {
         // 화면에 채보 출력
 
         // 사이드 트랙
-        makeChartFromArray(false, sideArray, div, noteSide, sideWidth, sideAlive, sidePos);
+        makeChartFromSideArray(false, sideArray, div, noteSide, sideWidth, sideAlive, sidePos);
 
         // FX
         if (isFXMode) {
-            makeChartFromArray(true, chipFXArray, div, noteFX, sideWidth);
-            makeChartFromArray(false, longFXArray, div, noteFX, sideWidth, FXAlive, FXPos);
+            makeChartFromSideArray(true, chipFXArray, div, noteFX, sideWidth);
+            makeChartFromSideArray(false, longFXArray, div, noteFX, sideWidth, FXAlive, FXPos);
         }
 
         // 노트
-        makeChartFromArray(true, chipArray, div, getNoteImage(lane), laneWidth);
-        makeChartFromArray(false, longArray, div, getNoteImage(lane), laneWidth, longAlive, longPos);
+        makeChartFromArray(true, chipArray, div, laneWidth);
+        makeChartFromArray(false, longArray, div, laneWidth, longAlive, longPos);
     }
 }
 
 // 주어진 배열에 맞게 채보 작성
-function makeChartFromArray(isChipArray, inputArray, div, noteSource, laneWidth, longAlive = null, longPos = null) {
+function makeChartFromSideArray(isChipArray, inputArray, div, noteSource, laneWidth, longAlive = null, longPos = null) {
     const noteLiteral = `01`;
 
-    for (let lane = 0; lane < (isFXMode ? 2 : keys); lane++) {
+    for (let lane = 0; lane < 2; lane++) {
         if (isChipArray) {
             // 칩 노트
             const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
@@ -292,6 +292,48 @@ function makeChartFromArray(isChipArray, inputArray, div, noteSource, laneWidth,
             // 전 마디부터 이번 마디도 꽉 채울 때
             if (longAlive[lane] && !inputArray[lane]) {
                 insertNote(div, noteSource, `bottom: ${-1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${displaySize + 1}px;`);
+            }
+        }
+    }
+}
+
+function makeChartFromArray(isChipArray, inputArray, div, laneWidth, longAlive = null, longPos = null) {
+    const noteLiteral = `01`;
+
+    for (let lane = 0; lane < keys; lane++) {
+        if (isChipArray) {
+            // 칩 노트
+            const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
+            for (let pos = 0; pos < bits; pos++) {
+                if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
+                    insertNote(div, getNoteImage(lane), `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${chipSize}px;`);
+                }
+            }
+        } else {
+            // 롱 노트
+            const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
+            for (let pos = 0; pos < bits; pos++) {
+                if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
+                    // 롱노트 시작점을 체크
+                    if (!longAlive[lane]) {
+                        longPos[lane] = pos;
+                    } else {
+                        insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
+                    }
+    
+                    // 롱노트 사활 토글
+                    longAlive[lane] = !longAlive[lane];
+                }
+    
+                // 다음 마디까지 롱노트가 이어질 때
+                if (longAlive[lane] && pos === (bits - 1)) {
+                    insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
+                }
+            }
+    
+            // 전 마디부터 이번 마디도 꽉 채울 때
+            if (longAlive[lane] && !inputArray[lane]) {
+                insertNote(div, getNoteImage(lane), `bottom: ${-1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${displaySize + 1}px;`);
             }
         }
     }

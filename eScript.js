@@ -192,20 +192,20 @@ function makeChart() {
         let longArray = null;
         switch (keys) {
             case 4:
-                chipArray = [chart[measure][11], chart[measure][12], chart[measure][14], chart[measure][15]];
-                longArray = [chart[measure][51], chart[measure][52], chart[measure][54], chart[measure][55]];
+                chipArray = [chart[measure][`11`], chart[measure][`12`], chart[measure][`14`], chart[measure][`15`]];
+                longArray = [chart[measure][`51`], chart[measure][`52`], chart[measure][`54`], chart[measure][`55`]];
                 break;
             case 5:
-                chipArray = [chart[measure][11], chart[measure][12], chart[measure][13], chart[measure][14], chart[measure][15]];
-                longArray = [chart[measure][51], chart[measure][52], chart[measure][53], chart[measure][54], chart[measure][55]];
+                chipArray = [chart[measure][`11`], chart[measure][`12`], chart[measure][`13`], chart[measure][`14`], chart[measure][`15`]];
+                longArray = [chart[measure][`51`], chart[measure][`52`], chart[measure][`53`], chart[measure][`54`], chart[measure][`55`]];
                 break;
             case 6:
-                chipArray = [chart[measure][11], chart[measure][12], chart[measure][13], chart[measure][15], chart[measure][18], chart[measure][19]];
-                longArray = [chart[measure][51], chart[measure][52], chart[measure][53], chart[measure][55], chart[measure][58], chart[measure][59]];
+                chipArray = [chart[measure][`11`], chart[measure][`12`], chart[measure][`13`], chart[measure][`15`], chart[measure][`18`], chart[measure][`19`]];
+                longArray = [chart[measure][`51`], chart[measure][`52`], chart[measure][`53`], chart[measure][`55`], chart[measure][`58`], chart[measure][`59`]];
                 break;
             case 8:
-                chipArray = [chart[measure][16], chart[measure][11], chart[measure][12], chart[measure][13], chart[measure][14], chart[measure][15], chart[measure][18], chart[measure][19]];
-                longArray = [chart[measure][56], chart[measure][51], chart[measure][52], chart[measure][53], chart[measure][54], chart[measure][55], chart[measure][58], chart[measure][59]];
+                chipArray = [chart[measure][`16`], chart[measure][`11`], chart[measure][`12`], chart[measure][`13`], chart[measure][`14`], chart[measure][`15`], chart[measure][`18`], chart[measure][`19`]];
+                longArray = [chart[measure][`56`], chart[measure][`51`], chart[measure][`52`], chart[measure][`53`], chart[measure][`54`], chart[measure][`55`], chart[measure][`58`], chart[measure][`59`]];
                 break;
         }
 

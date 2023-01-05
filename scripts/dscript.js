@@ -49,6 +49,7 @@ async function parseChart(fileName) {
     }
 
     chartDefault();
+    chartInfo();
 }
 
 // 4/4 박자에서 한 마디를 몇 픽셀로 표기할 것인가
@@ -64,6 +65,55 @@ let laneWidth = 0;
 let chipSize = 5;
 let currentOrder = ``;
 let isSideTrackMirror = false;
+let noteCount = 0;
+
+function chartInfo() {
+    const mode = isFXMode ? `${keys + 2}B` : `${keys}B`;
+    const title = chart[0][`TITLE`];
+    document.title = `[${mode} SC] ${title}`;
+
+    const header = document.getElementById(`header`);
+    const artist = chart[0][`ARTIST`];
+    const bpm = chart[0][`BPM`];
+    const level = chart[0][`PLAYLEVEL`];
+    header.innerText = `[${mode} SC] ${title} / Artist: ${artist} / BPM: ${bpm} / Level: ${level} / Notes: ${noteCount}`;
+
+    const hr = document.createElement(`hr`);
+    header.appendChild(hr);
+
+    const footer = document.getElementById(`footer`);
+    footer.appendChild(hr);
+
+    // 키보드 입력 받기
+    window.addEventListener(`keydown`, e => {
+        switch (e.key) {
+            case `d`:
+            case `D`:
+                chartDefault();
+                break;
+            case `c`:
+            case `C`:
+                chartCustom();
+                break;
+            case `m`:
+            case `M`:
+                chartMirror();
+                break;
+            case `r`:
+            case `R`:
+                chartRandom();
+                break;
+            case `h`:
+            case `H`:
+                chartHalf();
+                break;
+            case `s`:
+            case `S`:
+                setChipSize();
+                break;
+        }
+    });
+}
 
 // 노트 별 리소스 할당
 function getButtonResources() {
@@ -256,6 +306,7 @@ function makeChartFromArray(div, inputArray, noteSource, noteWidth, isLongArray,
             for (let pos = 0; pos < bits; pos++) {
                 if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
                     insertNote(div, noteSource, `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * noteWidth}px; width: ${noteWidth}px; height: ${chipSize}px;`);
+                    noteCount++;
                 }
             }
         } else {
@@ -268,6 +319,7 @@ function makeChartFromArray(div, inputArray, noteSource, noteWidth, isLongArray,
                         longPos[lane] = pos;
                     } else {
                         insertNote(div, noteSource, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * noteWidth}px; width: ${noteWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
+                        noteCount++;
                     }
     
                     // 롱노트 사활 토글
@@ -440,33 +492,3 @@ function chartHalf() {
     isSideTrackMirror = false;
     makeChart();
 }
-
-// 키보드 입력 받기
-window.addEventListener(`keydown`, e => {
-    switch (e.key) {
-        case `d`:
-        case `D`:
-            chartDefault();
-            break;
-        case `c`:
-        case `C`:
-            chartCustom();
-            break;
-        case `m`:
-        case `M`:
-            chartMirror();
-            break;
-        case `r`:
-        case `R`:
-            chartRandom();
-            break;
-        case `h`:
-        case `H`:
-            chartHalf();
-            break;
-        case `s`:
-        case `S`:
-            setChipSize();
-            break;
-    }
-});

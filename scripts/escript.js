@@ -46,6 +46,7 @@ async function parseChart(fileName) {
     keys = Number(chart[0][`GENRE`]);
 
     chartDefault();
+    chartInfo();
 }
 
 // 4/4 박자에서 한 마디를 몇 픽셀로 표기할 것인가
@@ -58,6 +59,59 @@ let noteWhite = ``;
 let laneWidth = 0;
 let chipSize = 5;
 let currentOrder = ``;
+let noteCount = 0;
+
+function chartInfo() {
+    const mode = `${keys}K`;
+    const title = chart[0][`TITLE`];
+    document.title = `[${mode} SHD] ${title}`;
+
+    const header = document.getElementById(`header`);
+    const artist = chart[0][`ARTIST`];
+    const bpm = chart[0][`BPM`];
+    const level = chart[0][`PLAYLEVEL`];
+    header.innerText = `[${mode} SHD] ${title} / Artist: ${artist} / BPM: ${bpm} / Level: ${level} / Notes: ${noteCount}`;
+
+    const hr = document.createElement(`hr`);
+    header.appendChild(hr);
+
+    const footer = document.getElementById(`footer`);
+    footer.appendChild(hr);
+
+    // 키보드 입력 받기
+    window.addEventListener(`keydown`, e => {
+        switch (e.key) {
+            case `d`:
+            case `D`:
+                chartDefault();
+                break;
+            case `c`:
+            case `C`:
+                chartCustom();
+                break;
+            case `m`:
+            case `M`:
+                chartMirror();
+                break;
+            case `r`:
+            case `R`:
+                chartRandom();
+                break;
+            case `f`:
+            case `F`:
+                chartFlip(false);
+                break;
+            case `i`:
+            case `I`:
+                chartFlip(true);
+                break;
+            case `s`:
+            case `S`:
+                setChipSize();
+                break;
+        }
+    });
+}
 
 // 노트 별 리소스 할당
 function getNoteResources() {
@@ -256,6 +310,7 @@ function makeChartFromArray(div, inputArray, isLongArray, longAlive = null, long
             for (let pos = 0; pos < bits; pos++) {
                 if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
                     insertNote(div, getNoteImage(lane), `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${chipSize}px;`);
+                    noteCount++;
                 }
             }
         } else {
@@ -268,6 +323,7 @@ function makeChartFromArray(div, inputArray, isLongArray, longAlive = null, long
                         longPos[lane] = pos;
                     } else {
                         insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
+                        noteCount++;
                     }
     
                     // 롱노트 사활 토글
@@ -422,7 +478,7 @@ function chartRandom() {
 }
 
 // 플립 및 미러 플립 배치 생성
-function chartFlip(isMirrorFlip = false) {
+function chartFlip(isMirrorFlip) {
     let left = null;
     let right = null;
 
@@ -454,37 +510,3 @@ function chartFlip(isMirrorFlip = false) {
 
     makeChart();
 }
-
-// 키보드 입력 받기
-window.addEventListener(`keydown`, e => {
-    switch (e.key) {
-        case `d`:
-        case `D`:
-            chartDefault();
-            break;
-        case `c`:
-        case `C`:
-            chartCustom();
-            break;
-        case `m`:
-        case `M`:
-            chartMirror();
-            break;
-        case `r`:
-        case `R`:
-            chartRandom();
-            break;
-        case `f`:
-        case `F`:
-            chartFlip();
-            break;
-        case `i`:
-        case `I`:
-            chartFlip(true);
-            break;
-        case `s`:
-        case `S`:
-            setChipSize();
-            break;
-    }
-});

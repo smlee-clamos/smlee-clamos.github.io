@@ -154,10 +154,7 @@ function makeChart() {
     getNoteResources();
 
     // 레인별 롱 노트 종료 여부
-    const longAlive = [];
-    for (let i = 0; i < keys; i++) {
-        longAlive.push(false);
-    }
+    const longAlive = new Array(keys).fill(false);
 
     // 마디별 노트 작성
     for (let measure = 1; measure < chart.length; measure++) {
@@ -210,10 +207,7 @@ function makeChart() {
         }
 
         // 롱 노트 최종 위치
-        const longPos = [];
-        for (let i = 0; i < keys; i++) {
-            longPos.push(0);
-        }
+        const longPos = new Array(keys).fill(0);
 
         // 레인 재배치
         const order = Array.from(currentOrder);
@@ -245,17 +239,16 @@ function makeChart() {
         }
 
         // 화면에 채보 출력
-        makeChartFromArray(true, chipArray, div, laneWidth);
-        makeChartFromArray(false, longArray, div, laneWidth, longAlive, longPos);
+        makeChartFromArray(div, chipArray, false);
+        makeChartFromArray(div, longArray, true, longAlive, longPos);
     }
 }
 
 // 주어진 배열에 맞게 채보 작성
-function makeChartFromArray(isChipArray, inputArray, div, laneWidth, longAlive = null, longPos = null) {
+function makeChartFromArray(div, inputArray, isLongArray, longAlive = null, longPos = null) {
     const noteLiteral = `01`;
-
     for (let lane = 0; lane < keys; lane++) {
-        if (isChipArray) {
+        if (!isLongArray) {
             // 칩 노트
             const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
             for (let pos = 0; pos < bits; pos++) {
@@ -350,7 +343,6 @@ function getOrderFromText(order) {
 // 커스텀 배치 생성
 function chartCustom() {
     let example = ``;
-
     switch (keys) {
         case 4:
             example = `1234`;
@@ -420,7 +412,7 @@ function getRandomOrder(array) {
 function chartRandom() {
     const array = [];
     for (let i = 0; i < keys; i++) {
-        array[i] = i;
+        array.push(i);
     }
 
     currentOrder = getRandomOrder(array);

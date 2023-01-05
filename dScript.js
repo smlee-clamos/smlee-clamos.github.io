@@ -145,12 +145,9 @@ function makeChart() {
     getButtonResources();
 
     // 레인별 롱 노트 종료 여부
-    const sideAlive = [false, false];
-    const FXAlive = [false, false];
-    const longAlive = [];
-    for (let i = 0; i < keys; i++) {
-        longAlive.push(false);
-    }
+    const sideAlive = new Array(2).fill(false);
+    const FXAlive = new Array(2).fill(false);
+    const longAlive = new Array(keys).fill(false);
 
     // 마디별 노트 작성
     for (let measure = 1; measure < chart.length; measure++) {
@@ -202,12 +199,9 @@ function makeChart() {
         }
 
         // 롱 노트 최종 위치
-        const sidePos = [0, 0];
-        const FXPos = [0, 0];
-        const longPos = [];
-        for (let i = 0; i < keys; i++) {
-            longPos.push(0);
-        }
+        const sidePos = new Array(2).fill(0);
+        const FXPos = new Array(2).fill(0);
+        const longPos = new Array(keys).fill(0);
 
         // 레인 재배치
         if (isSideTrackMirror) {
@@ -238,33 +232,28 @@ function makeChart() {
         }
 
         // 화면에 채보 출력
-
-        // 사이드 트랙
-        makeChartFromSideArray(false, sideArray, div, noteSide, sideWidth, sideAlive, sidePos);
-
-        // FX
         if (isFXMode) {
-            makeChartFromSideArray(true, chipFXArray, div, noteFX, sideWidth);
-            makeChartFromSideArray(false, longFXArray, div, noteFX, sideWidth, FXAlive, FXPos);
+            makeChartFromArray(div, chipFXArray, noteFX, sideWidth, false);
+            makeChartFromArray(div, longFXArray, noteFX, sideWidth, true, FXAlive, FXPos);
         }
-
-        // 노트
-        makeChartFromArray(true, chipArray, div, laneWidth);
-        makeChartFromArray(false, longArray, div, laneWidth, longAlive, longPos);
+        makeChartFromArray(div, sideArray, noteSide, sideWidth, true, sideAlive, sidePos);
+        makeChartFromArray(div, chipArray, null, noteWidth, false);
+        makeChartFromArray(div, longArray, null, noteWidth, true, longAlive, longPos);
     }
 }
 
 // 주어진 배열에 맞게 채보 작성
-function makeChartFromSideArray(isChipArray, inputArray, div, noteSource, laneWidth, longAlive = null, longPos = null) {
+function makeChartFromArray(div, inputArray, noteSource, noteWidth, isLongArray, longAlive = null, longPos = null) {
     const noteLiteral = `01`;
+    for (let lane = 0; lane < (!noteSource ? keys : 2); lane++) {
+        noteSource ??= getNoteImage(lane);
 
-    for (let lane = 0; lane < 2; lane++) {
-        if (isChipArray) {
+        if (!isLongArray) {
             // 칩 노트
             const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
             for (let pos = 0; pos < bits; pos++) {
                 if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-                    insertNote(div, noteSource, `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${chipSize}px;`);
+                    insertNote(div, noteSource, `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * noteWidth}px; width: ${noteWidth}px; height: ${chipSize}px;`);
                 }
             }
         } else {
@@ -276,7 +265,7 @@ function makeChartFromSideArray(isChipArray, inputArray, div, noteSource, laneWi
                     if (!longAlive[lane]) {
                         longPos[lane] = pos;
                     } else {
-                        insertNote(div, noteSource, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
+                        insertNote(div, noteSource, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * noteWidth}px; width: ${noteWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
                     }
     
                     // 롱노트 사활 토글
@@ -285,55 +274,13 @@ function makeChartFromSideArray(isChipArray, inputArray, div, noteSource, laneWi
     
                 // 다음 마디까지 롱노트가 이어질 때
                 if (longAlive[lane] && pos === (bits - 1)) {
-                    insertNote(div, noteSource, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
+                    insertNote(div, noteSource, `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * noteWidth}px; width: ${noteWidth}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
                 }
             }
     
             // 전 마디부터 이번 마디도 꽉 채울 때
             if (longAlive[lane] && !inputArray[lane]) {
-                insertNote(div, noteSource, `bottom: ${-1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${displaySize + 1}px;`);
-            }
-        }
-    }
-}
-
-function makeChartFromArray(isChipArray, inputArray, div, laneWidth, longAlive = null, longPos = null) {
-    const noteLiteral = `01`;
-
-    for (let lane = 0; lane < keys; lane++) {
-        if (isChipArray) {
-            // 칩 노트
-            const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
-            for (let pos = 0; pos < bits; pos++) {
-                if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-                    insertNote(div, getNoteImage(lane), `bottom: ${pos * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${chipSize}px;`);
-                }
-            }
-        } else {
-            // 롱 노트
-            const bits = inputArray[lane] ? inputArray[lane].length / 2 : 0;
-            for (let pos = 0; pos < bits; pos++) {
-                if (inputArray[lane].slice(pos * 2, (pos + 1) * 2) === noteLiteral) {
-                    // 롱노트 시작점을 체크
-                    if (!longAlive[lane]) {
-                        longPos[lane] = pos;
-                    } else {
-                        insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(pos - longPos[lane]) * displaySize / bits}px;`);
-                    }
-    
-                    // 롱노트 사활 토글
-                    longAlive[lane] = !longAlive[lane];
-                }
-    
-                // 다음 마디까지 롱노트가 이어질 때
-                if (longAlive[lane] && pos === (bits - 1)) {
-                    insertNote(div, getNoteImage(lane), `bottom: ${longPos[lane] * displaySize / bits - 1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${(bits - longPos[lane]) * displaySize / bits + 1}px;`);
-                }
-            }
-    
-            // 전 마디부터 이번 마디도 꽉 채울 때
-            if (longAlive[lane] && !inputArray[lane]) {
-                insertNote(div, getNoteImage(lane), `bottom: ${-1}px; left: ${lane * laneWidth}px; width: ${laneWidth}px; height: ${displaySize + 1}px;`);
+                insertNote(div, noteSource, `bottom: ${-1}px; left: ${lane * noteWidth}px; width: ${noteWidth}px; height: ${displaySize + 1}px;`);
             }
         }
     }
@@ -391,7 +338,6 @@ function getOrderFromText(order) {
 // 커스텀 배치 생성
 function chartCustom() {
     let example = ``;
-
     switch (keys) {
         case 4:
             example = `1234`;
@@ -458,7 +404,7 @@ function getRandomOrder(array) {
 function chartRandom() {
     const array = [];
     for (let i = 0; i < keys; i++) {
-        array[i] = i;
+        array.push(i);
     }
 
     // 사이드는 참 거짓만 판단하면 됨
@@ -471,7 +417,6 @@ function chartRandom() {
 function chartHalf() {
     let left = null;
     let right = null;
-
     switch (keys) {
         case 4:
         case 5:

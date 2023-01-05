@@ -2,6 +2,8 @@ const chart = [];
 let keys = 0;
 let isFXMode = false;
 
+parseChart(`source.txt`);
+
 async function parseChart(fileName) {
     const res = await fetch(fileName);
     const rawData = await res.text();

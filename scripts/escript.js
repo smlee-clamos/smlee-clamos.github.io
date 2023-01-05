@@ -1,7 +1,7 @@
 const chart = [];
 let keys = 0;
 
-parseChart(`sample.txt`);
+parseChart(`source.txt`);
 
 async function parseChart(fileName) {
     const res = await fetch(fileName);

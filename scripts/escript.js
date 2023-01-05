@@ -76,7 +76,7 @@ function chartInfo() {
     header.appendChild(hr);
 
     const footer = document.getElementById(`footer`);
-    footer.appendChild(hr);
+    footer.prependChild(hr);
 
     // 키보드 입력 받기
     window.addEventListener(`keydown`, e => {

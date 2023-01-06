@@ -72,12 +72,6 @@ function chartInfo() {
     const level = chart[0][`PLAYLEVEL`];
     header.innerText = `[${mode} SHD] ${title} / Artist: ${artist} / BPM: ${bpm} / Level: ${level} / Notes: ${noteCount}`;
 
-    const hr = document.createElement(`hr`);
-    header.appendChild(hr);
-
-    const footer = document.getElementById(`footer`);
-    footer.prependChild(hr);
-
     // 키보드 입력 받기
     window.addEventListener(`keydown`, e => {
         switch (e.key) {
@@ -200,11 +194,11 @@ function makeChart() {
     let globalTd = document.createElement(`td`);
 
     globalTable.id = `data`;
-    globalTable.appendChild(globalTr);
+    globalTable.append(globalTr);
 
-    document.getElementById(`article`).appendChild(globalTable);
+    document.getElementById(`article`).append(globalTable);
 
-    globalTr.appendChild(globalTd);
+    globalTr.append(globalTd);
 
     // 모드별 버튼 리소스 획득
     getNoteResources();
@@ -219,7 +213,7 @@ function makeChart() {
         const measureReal = measure - measureStart;
         if (measureReal >= 0 && measureReal % 4 === 0) {
             globalTd = document.createElement(`td`);
-            globalTr.appendChild(globalTd);
+            globalTr.append(globalTd);
         }
 
         // 지역 틀 만들기
@@ -227,18 +221,18 @@ function makeChart() {
         const localTr = document.createElement(`tr`);
         
         globalTd.insertBefore(localTable, globalTd.firstChild);
-        localTable.appendChild(localTr);
+        localTable.append(localTr);
         localTable.className = `fixed`;
         
         const localTh = document.createElement(`th`);
         const localTd = document.createElement(`td`);
         const div = document.createElement(`div`);
         
-        localTr.appendChild(localTh);
-        localTr.appendChild(localTd);
+        localTr.append(localTh);
+        localTr.append(localTd);
         localTh.innerHTML = measure;
         localTd.className = `chart`;
-        localTd.appendChild(div);
+        localTd.append(div);
         
         // 레인별 노트 위치
         let chipArray = null;
@@ -303,6 +297,7 @@ function makeChart() {
 // 주어진 배열에 맞게 채보 작성
 function makeChartFromArray(div, inputArray, isLongArray, longAlive = null, longPos = null) {
     const noteLiteral = `01`;
+    
     for (let lane = 0; lane < keys; lane++) {
         if (!isLongArray) {
             // 칩 노트
@@ -349,7 +344,7 @@ function insertNote(div, source, noteStyle) {
     const note = document.createElement(`img`);
     note.src = source;
     note.setAttribute(`style`, noteStyle);
-    div.appendChild(note);
+    div.append(note);
 }
 
 // 칩 노트 크기 설정
@@ -401,6 +396,7 @@ function getOrderFromText(order) {
 // 커스텀 배치 생성
 function chartCustom() {
     let example = ``;
+    
     switch (keys) {
         case 4:
             example = `1234`;
@@ -458,6 +454,7 @@ function getRandomInt(min, max) {
 // 배열이 주어졌을 때 임의의 레인을 생성
 function getRandomOrder(array) {
     let order = ``;
+
     while (array.length > 0) {
         let num = getRandomInt(0, array.length);
         order += array[num] + ``;
@@ -469,6 +466,7 @@ function getRandomOrder(array) {
 // 랜덤 배치 생성
 function chartRandom() {
     const array = [];
+
     for (let i = 0; i < keys; i++) {
         array.push(i);
     }

@@ -1,6 +1,4 @@
-import { createApp } from 'vue'
-
-createApp({
+export default {
     data() {
         return {
             awesome: false,
@@ -12,12 +10,4 @@ createApp({
             this.awesome = !this.awesome
         }
     }
-}).mount(`#app1`)
-
-createApp({
-    data() {
-        return {
-            text: `버튼2`
-        }
-    }
-}).mount(`#app2`)
+}

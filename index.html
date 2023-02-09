@@ -17,21 +17,11 @@
             import { createApp } from 'vue'
             import MyComponent from './script.js'
 
-            createApp(MyComponent).mount(`#app`);
+            createApp(MyComponent).mount(`#app`)
         </script>
     </head>
     <body>
         <div id="app">
-            <button class="btn btn-primary" @click="toggle">{{ text }}</button>
-
-            <template v-if="awesome">
-                <h1>멋진</h1>
-                <p>단락</p>
-            </template>
-            <template v-else>
-                <h1>멋지지 않은</h1>
-                <h2>제목</h2>
-            </template>
         </div>
     </body>
 </html>

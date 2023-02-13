@@ -17,7 +17,9 @@
             import { createApp } from 'vue'
             import MyComponent from './script.js'
 
-            createApp(MyComponent).mount(`#app`)
+            createApp({
+                components: MyComponent
+            }).mount(`#app`)
         </script>
     </head>
     <body>

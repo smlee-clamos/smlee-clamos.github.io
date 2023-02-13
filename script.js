@@ -23,7 +23,5 @@ export default {
             this.awesome = !this.awesome
         }
     },
-    template: {
-        templateText
-    }
+    template: templateText
 }
